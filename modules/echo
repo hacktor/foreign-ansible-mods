@@ -1,0 +1,35 @@
+#!/usr/bin/perl 
+use strict;
+use JSON;
+use Data::Dumper;
+
+#use File::Copy;
+#copy($ARGV[0],"/tmp/echo");
+# when called from ansible, a module will receive one argument: a path to a temporary file containing
+# key - value pairs. example:
+#
+# _ansible_version=2.5.1 _ansible_selinux_special_fs='['"'"'fuse'"'"', '"'"'nfs'"'"', '"'"'vboxsf'"'"', '"'"'ramfs'"'"', '"'"'9p'"'"']' _ansible_no_log=False _ansible_module_name=dummy _ansible_verbosity=0 _ansible_syslog_facility=LOG_USER _ansible_socket=None aap=1337 _ansible_diff=False _ansible_debug=False _ansible_shell_executable=/bin/sh _ansible_check_mode=False _ansible_tmpdir=None name='Larry'
+
+my %results = (
+        failed  => JSON::false,
+        changed => JSON::false,
+        msg     => '');
+my %ansible_hash;
+
+open my $a, "<", $ARGV[0] or die "Could not open $ARGV[0]\n";
+my $args = <$a>;
+my @list = $args =~ /([^=\s]*=(?:'[^=]*'|[^\s]*))[\s]*/g;
+
+while (my $keyvalue = pop @list) {
+    my ($key,$value) = $keyvalue =~ /^([^=]+)=(.*)$/;
+    $ansible_hash{$key} = $value;
+    $results{$key} = $value unless $key =~ /_ansible/;
+}
+
+#### Do something ####
+
+$results{msg} = 'Greetings from the echo module';
+$results{changed} = JSON::true;
+
+# return JSON formatted string
+print encode_json(\%results);

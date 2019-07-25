@@ -1,0 +1,25 @@
+---
+
+- name: test a bash and a perl module
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: bash module wrong
+      wrong:
+        name: "Do something"
+        foo: "bar"
+      ignore_errors: true
+      register: bashout
+    - debug: var=bashout
+
+    - name: perl module echo
+      echo:
+        name: "Larry"
+        leet: 1337
+        baz:
+          - foo
+          - bar
+      register: perlout
+    - debug: var=perlout
+
+...

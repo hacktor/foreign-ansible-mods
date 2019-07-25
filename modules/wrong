@@ -1,0 +1,5 @@
+#!/bin/bash
+args=$@
+cp $args /tmp/args
+echo '{ "failed": false, "changed": false, "msg": "'$args'" }'
+
