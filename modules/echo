@@ -3,8 +3,6 @@ use strict;
 use JSON;
 use Data::Dumper;
 
-#use File::Copy;
-#copy($ARGV[0],"/tmp/echo");
 # when called from ansible, a module will receive one argument: a path to a temporary file containing
 # key - value pairs. example:
 #
